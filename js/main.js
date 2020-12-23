@@ -148,12 +148,12 @@ function addLegend() {
   // add the empty legend div to the map
   legendControl.addTo(map);
 
-  const legend = $('#legend').html(`<span class="circle" ></span>
-                                    <label>High Quality River Sampling Site</label><br>`);
-  legend.append(`<span style="background:#2ea1cb"></span>
-      <label>High Quality River Drainage Basin</label><br>`);
-  legend.append(
-    `<span style="background:#1546d9"></span>
-      <label>High Quality and Cold Water Drainage Basin</label><br>`
-  );
+  const legendText = `<span class="circle" ></span>
+                        <label>High Quality River Sampling Site</label><br>
+                        <span class="circle" ></span>
+                        <label>High Quality River Sampling Site</label><br>
+                        <span style="background:#1546d9"></span>
+                        <label>High Quality and Cold Water Drainage Basin</label><br>`;
+
+  $('#legend').html(legendText);
 }
