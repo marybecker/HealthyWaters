@@ -25,6 +25,7 @@ const stateBoundaryGeoJson = $.getJSON('data/StateBoundary.geojson');
 const basinGeoJson = $.getJSON('data/bcg2_cw_basin.geojson');
 const sitesGeoJson = $.getJSON('data/bcg2_cw_sites.geojson');
 
+// use native Promise to wait for all data to be loaded
 Promise.all([stateBoundaryGeoJson, basinGeoJson, sitesGeoJson]).then((data) => {
   // now all your data is in one place
   console.log(data);
