@@ -15,40 +15,35 @@ L.esri
   .addTo(map);
 
 //Set styles and load boundary and basin data.  Add basin layers to layer control
-var linestyle = {
+const linestyle = {
   color: 'black',
   weight: 2,
 };
 
-var StateBoundary = $.getJSON(
-  'data/StateBoundary.geojson',
-  function (linedata) {
-    console.log(linedata);
-    L.geoJson(linedata, {
-      style: linestyle,
-    }).addTo(map);
-  }
-);
+// first request all three of your files
+const stateBoundaryGeoJson = $.getJSON('data/StateBoundary.geojson');
+const basinGeoJson = $.getJSON('data/bcg2_cw_basin.geojson');
+const sitesGeoJson = $.getJSON('data/bcg2_cw_sites.geojson');
 
-var Basin = $.getJSON('data/bcg2_cw_basin.geojson', function (polyData) {
-  console.log(polyData);
-  L.geoJson(polyData, {
-    style: style,
-  }).addTo(map);
-});
-
-var Sites = $.when(Basin).done(function () {
-  $.getJSON('data/bcg2_cw_sites.geojson', function (data) {
-    // jQuery method uses AJAX request for the GeoJSON data
-    console.log(data);
-    // call draw map and send data as parameter
-    drawMap(data);
-  });
+Promise.all([stateBoundaryGeoJson, basinGeoJson, sitesGeoJson]).then((data) => {
+  // now all your data is in one place
+  console.log(data);
+  // call draw map and send all data as one parameter (an array object)
+  drawMap(data);
 });
 
 function drawMap(data) {
+  // create separate Leaflet GeoJson layers with data here
+  const states = L.geoJson(data[0], {
+    style: linestyle,
+  }).addTo(map);
+
+  const basins = L.geoJson(data[1], {
+    style: style,
+  }).addTo(map);
+
   // create Leaflet data layer and add to map
-  const sites = L.geoJson(data, {
+  const sites = L.geoJson(data[2], {
     pointToLayer: function (feature, latlng) {
       return L.circleMarker(latlng);
     },
