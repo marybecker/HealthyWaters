@@ -60,7 +60,7 @@ function drawMap(data) {
     },
     // add hover/touch functionality to each feature layer
     onEachFeature: function (feature, layer) {
-      const props = layer.feature.properties;
+      const props = feature.properties;
       const CWLab = getLab(props['CWSite']);
 
       // assemble string sequence of info for tooltip (end line break with + operator)
@@ -149,11 +149,10 @@ function addLegend() {
   legendControl.addTo(map);
 
   const legendText = `<span class="circle" ></span>
-                        <label>High Quality River Sampling Site</label><br>
-                        <span class="circle" ></span>
-                        <label>High Quality River Sampling Site</label><br>
-                        <span style="background:#1546d9"></span>
-                        <label>High Quality and Cold Water Drainage Basin</label><br>`;
+                        <label>High Quality River Sampling Site</label><br><span style="background:#2ea1cb"></span>
+                        <label>High Quality River Drainage Basin</label><br><span style="background:#1546d9"></span>
+                        <label>High Quality and Cold Water Drainage Basin</label><br>
+                    `;
 
   $('#legend').html(legendText);
 }
