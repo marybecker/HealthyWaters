@@ -24,7 +24,7 @@ var StateBoundary = $.getJSON("data/StateBoundary.geojson",function(linedata){
     }).addTo(map);
 });
 
-var Basin = $.getJSON("data/bcg2_cw_basin.geojson",function(polyData){
+var Basin = $.getJSON("data/hq_catchments.geojson",function(polyData){
     console.log(polyData);
     L.geoJson(polyData,{
         style:style
@@ -32,7 +32,7 @@ var Basin = $.getJSON("data/bcg2_cw_basin.geojson",function(polyData){
 });
 
 var Sites = $.when(Basin).done(function () {
-    $.getJSON("data/bcg2_cw_sites.geojson", function (data) {
+    $.getJSON("data/hq_sites.geojson", function (data) {
         // jQuery method uses AJAX request for the GeoJSON data
         console.log(data);
         // call draw map and send data as parameter
@@ -48,9 +48,9 @@ function drawMap(data) {
         },
         style: function style(feature){
             return{
-                radius: 6,
-                fillColor: "#ffffff",
-                color: "#000",
+                radius: 5,
+                fillColor: '#1546d9',
+                color: "#ffffff",
                 weight: 1,
                 opacity: 0.5,
                 fillOpacity: 0.7
@@ -59,13 +59,15 @@ function drawMap(data) {
         // add hover/touch functionality to each feature layer
         onEachFeature: function (feature, layer) {
             const props = layer.feature.properties;
-            const CWLab = getLab(props["CWSite"]);
+            /*const CWLab = getLab(props["CWSite"]);*/
 
             // assemble string sequence of info for tooltip (end line break with + operator)
-            let tooltipInfo = `<b>${props["Station_Na"]}</b></br>
-                                   SID: ${props["STA_SEQ"]}</br>
-                                   BCG: ${props["BCG"]}</br>
-                                   Cold Water: ${CWLab}`;
+            // let tooltipInfo = `<b>${props["Station_Na"]}</b></br>
+            //                        SID: ${props["STA_SEQ"]}</br>
+            //                        BCG: ${props["BCG"]}</br>
+            //                        Cold Water: ${CWLab}`;
+            let tooltipInfo = `<b>${props["locationName"]}</b></br>
+                                   SID: ${props["staSeq"]}</br>`;
 
             // bind a tooltip to layer with county-specific information
             layer.bindTooltip(tooltipInfo, {
@@ -109,12 +111,19 @@ function getColor(CW){
 
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.CW),
+        fillColor: '#2ea1cb',
         weight: 0.5,
         opacity: 0.7,
         color: 'white',
         fillOpacity: 0.7
     };
+    // return {
+    //     fillColor: getColor(feature.properties.CW),
+    //     weight: 0.5,
+    //     opacity: 0.7,
+    //     color: 'white',
+    //     fillOpacity: 0.7
+    // };
 }
 
 //Function to get label
@@ -150,11 +159,11 @@ function addLegend() {
     // add the empty legend div to the map
     legendControl.addTo(map);
 
-    const legend = $('#legend').html(`<span class="circle" ></span>
+    const legend = $('#legend').html(`<span class="circle" style="background: #1546d9"></span>
                                     <label>High Quality River Sampling Site</label><br>`);
     legend.append(`<span style="background:#2ea1cb"></span>
-      <label>High Quality River Drainage Basin</label><br>`);
-    legend.append(
-        `<span style="background:#1546d9"></span>
-      <label>High Quality and Cold Water Drainage Basin</label><br>`);
+      <label>High Quality River Catchment</label><br>`);
+    // legend.append(
+    //     `<span style="background:#1546d9"></span>
+    //   <label>High Quality and Cold Water Drainage Basin</label><br>`);
 }
